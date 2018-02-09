@@ -7,7 +7,7 @@ seed()
 
 def d6(num):
     n = 0
-    for i in range(num - 1):
+    for _ in range(num - 1):
         n += randint(1, 6)
     return n
 
@@ -23,12 +23,36 @@ def build_system(density):
 
 
 def build_world():
+    def get_temp():
+        dm_table = {0: 0, 1: 0, 2: -2, 3: -2, 4: -1, 5: -1,
+                    6: 0, 7: 0, 8: 1, 9: 1, 10: 2, 11: 6,
+                    12: 6, 13: 2, 14: -1, 15: 2}
+        return d6(2) + dm_table.get(atmosphere)
+
+    def get_hydrographics():
+        if size in (0, 1):
+            return 0
+        dm = -7
+        if atmosphere in (0, 1, 10, 11, 12):
+            dm += -4
+        if atmosphere not in (13, 15):
+            if temperature in (10, 11):
+                dm += -2
+            elif temperature > 11:
+                dm += -6
+        return d6(2) + dm
+
     size = d6(2) - 2
+    atmosphere = d6(2) - 7 + size
+    temperature = get_temp()
+    hydrographics = get_hydrographics()
+    population = d6(2) - 2
     return {
         'starport': '',
         'size': size,
-        'atmosphere': '',
-        'hydrographic': '',
+        'atmosphere': atmosphere,
+        'hydrographic': hydrographics,
+        'temperature': temperature,
         'base': '',
         'travelZone': '',
         'polity': '',
