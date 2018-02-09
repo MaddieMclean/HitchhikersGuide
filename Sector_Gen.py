@@ -2,12 +2,11 @@ from random import seed, randint
 
 sector_width = 8
 sector_depth = 10
-seed()
 
 
 def d6(num):
     n = 0
-    for _ in range(num - 1):
+    for _ in range(num):
         n += randint(1, 6)
     return n
 
@@ -20,6 +19,7 @@ def build_system(density):
     }
     if world:
         system['worldDetails'] = build_world()
+    return system
 
 
 def build_world():
@@ -43,9 +43,9 @@ def build_world():
         return d6(2) + dm
 
     size = d6(2) - 2
-    atmosphere = d6(2) - 7 + size
+    atmosphere = to_zero(d6(2) - 7 + size)
     temperature = get_temp()
-    hydrographics = get_hydrographics()
+    hydrographics = to_zero(get_hydrographics())
     population = d6(2) - 2
     return {
         'starport': '',
@@ -57,3 +57,17 @@ def build_world():
         'travelZone': '',
         'polity': '',
     }
+
+
+def to_zero(n):
+    return 0 if n < 0 else n
+
+
+def main():
+    for _ in range(10):
+        seed()
+        print(build_system(0))
+
+
+if __name__ == '__main__':
+    main()
