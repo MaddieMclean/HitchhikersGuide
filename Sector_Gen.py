@@ -49,6 +49,7 @@ def build_world():
     return {
         'name': '',
         'polity': '',
+        'description': '',
         'tradeCode': trade_code,
         'travelZone': travel_zone,
         'techLevel': tech_level,
@@ -174,7 +175,7 @@ def get_travel_zone(planet, civ):
         warning += '|dangerous political climate| '
     if law:
         warning += '|inhospitable law enforcement| '
-    return f'amber: {warning}' if any((atmo, law, gov)) else 'green'
+    return f'amber: {warning}' if any([atmo, law, gov]) else 'green'
 
 
 def get_trade_code(planet, civ, tech_level):
@@ -217,7 +218,7 @@ def get_trade_code(planet, civ, tech_level):
 
 def main():
     worlds = []
-    for _ in range(10):
+    for _ in range(1):
         seed()
         worlds.append(build_system(0))
     print(json.dumps(worlds))
